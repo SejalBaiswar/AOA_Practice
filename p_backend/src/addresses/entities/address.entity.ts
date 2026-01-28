@@ -53,6 +53,7 @@ export class Address {
 
   @ManyToOne(() => User, (user) => user.addresses, {
     nullable: false,
+    createForeignKeyConstraints: false,
   })
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   user: User;

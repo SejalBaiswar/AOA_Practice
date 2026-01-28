@@ -27,7 +27,6 @@ export enum Specialization {
   ANESTHESIOLOGY = 'Anesthesiology',
 }
 
-// 👇 ONLY CHANGE IS HERE
 @Entity('users', { synchronize: false })
 export class User {
   @PrimaryGeneratedColumn('uuid')
