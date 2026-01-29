@@ -197,4 +197,16 @@ export class UsersService {
       .where('user.email = :email', { email })
       .getOne();
   }
+
+  async findByResetToken(token: string): Promise<User | null> {
+    return this.userRepository.findOne({
+      where: { resetPasswordToken: token },
+    });
+  }
+
+  async findByEmail(email: string): Promise<User | null> {
+    return this.userRepository.findOne({
+      where: { email },
+    });
+  }
 }
