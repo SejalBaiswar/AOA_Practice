@@ -26,7 +26,7 @@ export class Address {
   @Column({ type: 'varchar', length: 255, nullable: false })
   country: string;
 
-  @Column({ type: 'varchar', length: 20, nullable: false })
+  @Column({ type: 'varchar', length: 20, nullable: true })
   zipCode: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
