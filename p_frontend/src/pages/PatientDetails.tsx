@@ -46,7 +46,7 @@ export function PatientDetails({ patient }: Props) {
 
       {/* Address Section */}
       {(patient.address || (patient.addresses && patient.addresses.length > 0)) && (
-        <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-6 border border-gray-200 shadow-sm">
+        <div className="bg-gradient-to-br from-red-50 to-white rounded-xl p-6 border border-red-100 shadow-sm">
           <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
             <MapPin className="w-5 h-5 text-red-800" />
             Address Details
@@ -59,28 +59,28 @@ export function PatientDetails({ patient }: Props) {
                 <>
                   {address.street && (
                     <DetailCard
-                      icon={<Home className="w-4 h-4 text-gray-600" />}
+                      icon={<Home className="w-4 h-4 text-red-700" />}
                       label="Street"
                       value={address.street}
                     />
                   )}
                   <DetailCard
-                    icon={<MapPin className="w-4 h-4 text-gray-600" />}
+                    icon={<MapPin className="w-4 h-4 text-red-700" />}
                     label="City"
                     value={address.city}
                   />
                   <DetailCard
-                    icon={<MapPin className="w-4 h-4 text-gray-600" />}
+                    icon={<MapPin className="w-4 h-4 text-red-700" />}
                     label="State"
                     value={address.state}
                   />
                   <DetailCard
-                    icon={<MapPin className="w-4 h-4 text-gray-600" />}
+                    icon={<MapPin className="w-4 h-4 text-red-700" />}
                     label="Country"
                     value={address.country}
                   />
                   <DetailCard
-                    icon={<MapPin className="w-4 h-4 text-gray-600" />}
+                    icon={<MapPin className="w-4 h-4 text-red-700"/>}
                     label="Zip Code"
                     value={address.zipCode}
                   />

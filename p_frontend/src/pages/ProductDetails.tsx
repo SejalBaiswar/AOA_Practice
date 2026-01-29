@@ -64,11 +64,15 @@ export default function OrderDetailsDialog({ order, onClose }: Props) {
                   label="Shade"
                   value={order.shade}
                 />
-               <DetailCard
-  icon={<Layers className="w-4 h-4 text-red-700" />}
-  label="Tooth Numbers"
-  value={Array.isArray(order.tooth_numbers) ? order.tooth_numbers.join(", ") : order.tooth_numbers}
-/>
+                <DetailCard
+                  icon={<Layers className="w-4 h-4 text-red-700" />}
+                  label="Tooth Numbers"
+                  value={
+                    Array.isArray(order.tooth_numbers)
+                      ? order.tooth_numbers.join(", ")
+                      : order.tooth_numbers
+                  }
+                />
                 <DetailCard
                   icon={<AlertCircle className="w-4 h-4 text-red-700" />}
                   label="Priority"
@@ -89,18 +93,18 @@ export default function OrderDetailsDialog({ order, onClose }: Props) {
             {/* Image Section */}
             {/* Image Section */}
             {/* {order.image && ( */}
-              <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                  <ImageIcon className="w-5 h-5 text-red-800" />
-                  Reference Image
-                </h3>
+            <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-6 border border-gray-200 shadow-sm">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <ImageIcon className="w-5 h-5 text-red-800" />
+                Reference Image
+              </h3>
 
-                <img
-                  src={`data:image/;base64,${order.image}`}
-                  alt="Order reference"
-                  className="w-24 h-24 object-contain rounded border cursor-pointer"
-                />
-              </div>
+              <img
+                src={`data:image/;base64,${order.image}`}
+                alt="Order reference"
+                className="w-24 h-24 object-contain rounded border cursor-pointer"
+              />
+            </div>
             {/* )} */}
           </div>
         )}
@@ -135,7 +139,3 @@ function DetailCard({
     </div>
   );
 }
-
-
-
-
