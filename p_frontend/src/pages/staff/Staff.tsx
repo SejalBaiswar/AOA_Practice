@@ -14,6 +14,7 @@ import type { Staff } from "../../types/staffType";
 import { StaffTable } from "./StaffTable";
 import { StaffDetails } from "./StaffDetails";
 import { getStaff } from "../../api/staff.api";
+import DefaultSkeleton from "../DefaultSkeleton";
 
 export default function StaffPage() {
   const location = useLocation();
@@ -95,10 +96,14 @@ export default function StaffPage() {
       )}
 
       {loading ? (
-        <div className="text-center py-8 text-gray-500">Loading staff...</div>
-      ) : (
-        <StaffTable staff={staff} onView={handleViewStaff} />
-      )}
+  <div className="space-y-4">
+    <DefaultSkeleton />
+    <DefaultSkeleton />
+    <DefaultSkeleton />
+  </div>
+) : (
+  <StaffTable staff={staff} onView={handleViewStaff} />
+)}
 
       <Sheet open={details} onOpenChange={setDetails}>
         <SheetContent
@@ -113,7 +118,10 @@ export default function StaffPage() {
           p-0
         "
         >
-          <SheetHeader className="px-6 py-4 border-b flex-shrink-0" style={{ backgroundColor: "#f1cdd3ad" }}>
+          <SheetHeader
+            className="px-6 py-4 border-b flex-shrink-0"
+            style={{ backgroundColor: "#f1cdd3ad" }}
+          >
             <SheetTitle className="text-black-500 font-bold">
               Staff Details
             </SheetTitle>

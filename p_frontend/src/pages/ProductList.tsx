@@ -20,6 +20,7 @@ import OrderDetailsDialog from "./ProductDetails";
 import {type Order } from "../api/orders.api";
 import { useParams } from "react-router-dom";
 import { getOrdersByPatientId, getOrderById } from "../api/orders.api";
+import DefaultSkeleton from "./DefaultSkeleton";
 
 /* ---------- Badge Helpers (same pattern as Patient) ---------- */
 const getPriorityBadge = (priority: string) => {
@@ -160,35 +161,58 @@ export default function ProductListPage() {
           </TableHeader>
 
           <TableBody>
-            {orders.map((o) => (
-              <TableRow key={o.order_id}>
-                <TableCell>{o.order_id}</TableCell>
-                <TableCell>{o.case_type}</TableCell>
-                <TableCell>{getPriorityBadge(o.priority)}</TableCell>
-                <TableCell>{getStatusBadge(o.status)}</TableCell>
-                <TableCell>{o.order_date.slice(0, 10)}</TableCell>
+  {loading ? (
+    <TableRow>
+      <TableCell colSpan={6}>
+        <div className="space-y-4 py-4">
+          <DefaultSkeleton />
+          <DefaultSkeleton />
+          <DefaultSkeleton />
+        </div>
+      </TableCell>
+    </TableRow>
+  ) : error ? (
+    <TableRow>
+      <TableCell colSpan={6} className="text-red-600 py-6 text-center">
+        {error}
+      </TableCell>
+    </TableRow>
+  ) : orders.length === 0 ? (
+    <TableRow>
+      <TableCell colSpan={6} className="py-6 text-center text-gray-500">
+        No products found
+      </TableCell>
+    </TableRow>
+  ) : (
+    orders.map((o) => (
+      <TableRow key={o.order_id}>
+        <TableCell>{o.order_id}</TableCell>
+        <TableCell>{o.case_type}</TableCell>
+        <TableCell>{getPriorityBadge(o.priority)}</TableCell>
+        <TableCell>{getStatusBadge(o.status)}</TableCell>
+        <TableCell>{o.order_date.slice(0, 10)}</TableCell>
+        <TableCell>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onClick={() => handleViewOrder(o.order_id)}
+                className="cursor-pointer"
+              >
+                View Details
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </TableCell>
+      </TableRow>
+    ))
+  )}
+</TableBody>
 
-                <TableCell>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon">
-                        <MoreVertical className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem
-                        onClick={() => handleViewOrder(o.order_id)}
-                        className="cursor-pointer"
-                      >
-                        View Details
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
         </Table>
       </div>
 

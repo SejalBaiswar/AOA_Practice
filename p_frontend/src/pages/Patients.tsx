@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Sheet,
-  SheetContent,
-} from "../components/ui/sheet";
+import { Sheet, SheetContent } from "../components/ui/sheet";
 
 import { Button } from "../components/ui/button";
 import type { Patient } from "../types/patientType";
@@ -11,6 +8,7 @@ import { PatientDetails } from "./PatientDetails";
 import PatientOnboardingForm from "./PatientOnboardingForm";
 import AddProductForm from "./AddProductForm";
 import { getPatients } from "../api/patients.api";
+import DefaultSkeleton from "./DefaultSkeleton";
 
 /* ✅ SAME WIDTH AS ORIGINAL PATIENT ONBOARDING */
 const RIGHT_SHEET_CLASS = `
@@ -34,20 +32,29 @@ export default function Patients() {
   const [openAddProduct, setOpenAddProduct] = useState(false);
   const [productPatient, setProductPatient] = useState<Patient | null>(null);
 
+  const [loading, setLoading] = useState(true);
+
+
   useEffect(() => {
     fetchPatients();
   }, []);
 
-  async function fetchPatients() {
+async function fetchPatients() {
+  try {
+    setLoading(true);
     const data = await getPatients();
     setPatients(
       data.map((p: any) => ({
         ...p,
         dob: p.dob ? new Date(p.dob) : null,
         address: p.addresses?.[0],
-      }))
+      })),
     );
+  } finally {
+    setLoading(false);
   }
+}
+
 
   function handleCreatePatient(patient: Patient) {
     setPatients((prev) => [patient, ...prev]);
@@ -76,11 +83,19 @@ export default function Patients() {
         </Button>
       </div>
 
-      <PatientTable
-        patients={patients}
-        onView={handleViewPatient}
-        onAddProduct={handleAddProduct}
-      />
+      {loading ? (
+        <div className="space-y-4">
+          <DefaultSkeleton />
+          <DefaultSkeleton />
+          <DefaultSkeleton />
+        </div>
+      ) : (
+        <PatientTable
+          patients={patients}
+          onView={handleViewPatient}
+          onAddProduct={handleAddProduct}
+        />
+      )}
 
       {/* ---------- PATIENT DETAILS ---------- */}
       <Sheet open={openDetails} onOpenChange={setOpenDetails}>
