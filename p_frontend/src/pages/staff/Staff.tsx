@@ -96,11 +96,11 @@ export default function StaffPage() {
       )}
 
       {loading ? (
-  <div className="space-y-4">
-    <DefaultSkeleton />
-    <DefaultSkeleton />
-    <DefaultSkeleton />
-  </div>
+ <div className="space-y-4">
+  {Array.from({ length: 10 }).map((_, index) => (
+    <DefaultSkeleton key={index} />
+  ))}
+</div>
 ) : (
   <StaffTable staff={staff} onView={handleViewStaff} />
 )}

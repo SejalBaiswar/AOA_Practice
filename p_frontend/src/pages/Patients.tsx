@@ -34,27 +34,25 @@ export default function Patients() {
 
   const [loading, setLoading] = useState(true);
 
-
   useEffect(() => {
     fetchPatients();
   }, []);
 
-async function fetchPatients() {
-  try {
-    setLoading(true);
-    const data = await getPatients();
-    setPatients(
-      data.map((p: any) => ({
-        ...p,
-        dob: p.dob ? new Date(p.dob) : null,
-        address: p.addresses?.[0],
-      })),
-    );
-  } finally {
-    setLoading(false);
+  async function fetchPatients() {
+    try {
+      setLoading(true);
+      const data = await getPatients();
+      setPatients(
+        data.map((p: any) => ({
+          ...p,
+          dob: p.dob ? new Date(p.dob) : null,
+          address: p.addresses?.[0],
+        })),
+      );
+    } finally {
+      setLoading(false);
+    }
   }
-}
-
 
   function handleCreatePatient(patient: Patient) {
     setPatients((prev) => [patient, ...prev]);
@@ -85,9 +83,9 @@ async function fetchPatients() {
 
       {loading ? (
         <div className="space-y-4">
-          <DefaultSkeleton />
-          <DefaultSkeleton />
-          <DefaultSkeleton />
+          {Array.from({ length: 10 }).map((_, index) => (
+            <DefaultSkeleton key={index} />
+          ))}
         </div>
       ) : (
         <PatientTable
