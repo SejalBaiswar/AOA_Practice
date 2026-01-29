@@ -8,15 +8,16 @@ import StaffPage from "./pages/staff/Staff";
 import ProductList from "./pages/ProductList";
 import Login from "./pages/Login";
 
-// const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-//   const token = localStorage.getItem("accessToken");
-//
-//   if (!token) {
-//     return <Navigate to="/login" replace />;
-//   }
-//
-//   return <>{children}</>;
-// };
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const token = localStorage.getItem("accessToken");
+  const practitionerType = localStorage.getItem("practitionerType");
+
+  if (!token || practitionerType !== "Practice") {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <>{children}</>;
+};
 
 export default function App() {
   return (
@@ -29,7 +30,7 @@ export default function App() {
         <Route
           path="/*"
           element={
-            // <ProtectedRoute>
+            <ProtectedRoute>
             <SidebarProvider defaultOpen={false}>
               <div className="h-screen w-screen flex flex-col overflow-hidden bg-background text-foreground">
                 <Navbar />
@@ -69,7 +70,7 @@ export default function App() {
                 </div>
               </div>
             </SidebarProvider>
-            // </ProtectedRoute>
+           </ProtectedRoute>
           }
         />
       </Routes>
