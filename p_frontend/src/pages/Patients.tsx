@@ -128,16 +128,16 @@ export default function Patients() {
         </SheetContent>
       </Sheet>
 
-      {/* ---------- ADD PRODUCT ---------- */}
+      {/* ---------- Create Order ---------- */}
       <Sheet open={openAddProduct} onOpenChange={setOpenAddProduct}>
         <SheetContent side="right" className={RIGHT_SHEET_CLASS}>
           <div
             className="border-b px-6 py-4"
             style={{ backgroundColor: "#f1cdd3ad" }}
           >
-            <h2 className="font-semibold">Add Product</h2>
+            <h2 className="font-semibold">Create Order</h2>
             <p className="text-sm text-muted-foreground">
-              Fill the form and add new product
+              Fill the form and create new order
             </p>
           </div>
           <div className="p-6 overflow-y-auto h-[calc(100vh-80px)]">

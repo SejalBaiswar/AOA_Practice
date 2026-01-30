@@ -86,7 +86,7 @@ export default function OrderDetailsDialog({ order, onClose }: Props) {
                 <DetailCard
                   icon={<Calendar className="w-4 h-4 text-red-700" />}
                   label="Order Date"
-                  value={order.order_date}
+                  value={order.order_date.slice(0,10)}
                 />
               </div>
             </div>

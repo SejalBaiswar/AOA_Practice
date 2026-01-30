@@ -413,7 +413,7 @@ export default function AddProductForm({ patientId, onSuccess }: Props) {
 
         <div className="flex justify-end pt-4">
           <Button type="submit" className="bg-red-800 hover:bg-red-900">
-            Add Product
+            Create Order
           </Button>
         </div>
       </form>

@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 type Props = {
   patients: Patient[];
   onView: (patient: Patient) => void;        // View Patient Details (Sheet)
-  onAddProduct: (patient: Patient) => void;  // Add Product (Sheet)
+  onAddProduct: (patient: Patient) => void;  // Create Order (Sheet)
 };
 
 export function PatientTable({
@@ -125,12 +125,12 @@ export function PatientTable({
                       View Patient Details
                     </DropdownMenuItem>
 
-                    {/* ADD PRODUCT */}
+                    {/* Create Order */}
                     <DropdownMenuItem
                       onClick={() => onAddProduct(p)}
                       className="cursor-pointer"
                     >
-                      Add Product
+                      Create Order
                     </DropdownMenuItem>
 
                     {/* VIEW PRODUCT DETAILS */}
