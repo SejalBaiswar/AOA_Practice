@@ -20,44 +20,57 @@ import { PatientOrdersQueryDto } from './dto/patient-orders-query.dto';
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
+  /* ---------- CREATE ORDER ---------- */
   @Post()
   @UseInterceptors(FileInterceptor('image'))
   async createOrder(@Body() createOrderDto: CreateOrderDto) {
     const order = await this.ordersService.createOrder(createOrderDto);
 
     return {
-      statusCode: HttpStatus.CREATED,
+      success: true,
+      status: HttpStatus.CREATED,
       message: 'Order created successfully',
       data: order,
     };
   }
 
-  /* ✅ PRODUCT LIST */
+  /* ---------- PRODUCT LIST ---------- */
   @Get('product-list')
   async getProductList() {
+    const products = await this.ordersService.getProductList();
+
     return {
-      statusCode: HttpStatus.OK,
-      data: await this.ordersService.getProductList(),
+      success: true,
+      status: HttpStatus.OK,
+      message: 'Product list fetched successfully',
+      data: products,
     };
   }
 
-  /* ✅ PRODUCT TYPE (DEPENDENT) */
+  /* ---------- PRODUCT TYPE (DEPENDENT) ---------- */
   @Get('product-type')
   async getProductType(@Query('listName') listName: string) {
     if (!listName) {
       return {
-        statusCode: 400,
+        success: false,
+        status: HttpStatus.BAD_REQUEST,
         message: 'listName is required',
         data: [],
       };
     }
 
+    const productTypes =
+      await this.ordersService.getProductTypesByListName(listName);
+
     return {
-      statusCode: 200,
-      data: await this.ordersService.getProductTypesByListName(listName),
+      success: true,
+      status: HttpStatus.OK,
+      message: 'Product types fetched successfully',
+      data: productTypes,
     };
   }
 
+  /* ---------- ORDERS BY PATIENT ---------- */
   @Get('patient/:patientId')
   async getOrdersByPatientId(
     @Param('patientId', new ParseUUIDPipe()) patientId: string,
@@ -70,14 +83,19 @@ export class OrdersController {
     );
 
     return {
-      statusCode: HttpStatus.OK,
-      ...result,
+      success: true,
+      status: HttpStatus.OK,
+      message: 'Orders fetched successfully',
+      data: result.data,
+      meta: result.meta,
     };
   }
 
-  /* ❗ KEEP LAST */
+  /* ---------- ORDER BY ID (KEEP LAST) ---------- */
   @Get(':orderId')
-  async getOrderById(@Param('orderId', new ParseUUIDPipe()) orderId: string) {
+  async getOrderById(
+    @Param('orderId', new ParseUUIDPipe()) orderId: string,
+  ) {
     const order = await this.ordersService.getOrderById(orderId);
 
     if (!order) {
@@ -85,7 +103,9 @@ export class OrdersController {
     }
 
     return {
-      statusCode: HttpStatus.OK,
+      success: true,
+      status: HttpStatus.OK,
+      message: 'Order fetched successfully',
       data: order,
     };
   }

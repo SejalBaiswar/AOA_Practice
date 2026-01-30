@@ -18,30 +18,72 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  /* ---------- CREATE USER ---------- */
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    const user = await this.usersService.create(createUserDto);
+
+    return {
+      success: true,
+      status: HttpStatus.CREATED,
+      message: 'User created successfully',
+      data: user,
+    };
   }
 
+  /* ---------- GET ALL USERS ---------- */
   @Get()
-  findAll(@Query('practitionerType') practitionerType?: string) {
-    return this.usersService.findAll(practitionerType);
+  async findAll(@Query('practitionerType') practitionerType?: string) {
+    const users = await this.usersService.findAll(practitionerType);
+
+    return {
+      success: true,
+      status: HttpStatus.OK,
+      message: 'Users fetched successfully',
+      data: users,
+    };
   }
 
+  /* ---------- GET SINGLE USER ---------- */
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const user = await this.usersService.findOne(id);
+
+    return {
+      success: true,
+      status: HttpStatus.OK,
+      message: 'User fetched successfully',
+      data: user,
+    };
   }
 
+  /* ---------- UPDATE USER ---------- */
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    const updatedUser = await this.usersService.update(id, updateUserDto);
+
+    return {
+      success: true,
+      status: HttpStatus.OK,
+      message: 'User updated successfully',
+      data: updatedUser,
+    };
   }
 
+  /* ---------- DELETE USER ---------- */
   @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
+  async remove(@Param('id') id: string) {
+    await this.usersService.remove(id);
+
+    return {
+      success: true,
+      status: HttpStatus.OK,
+      message: 'User deleted successfully',
+      data: null,
+    };
   }
 }

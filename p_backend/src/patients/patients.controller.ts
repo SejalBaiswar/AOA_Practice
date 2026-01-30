@@ -17,30 +17,75 @@ import { UpdatePatientDto } from './dto/update-patient.dto';
 export class PatientsController {
   constructor(private readonly patientsService: PatientsService) {}
 
+  /* ---------- CREATE PATIENT ---------- */
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() createPatientDto: CreatePatientDto) {
-    return this.patientsService.create(createPatientDto);
+  async create(@Body() createPatientDto: CreatePatientDto) {
+    const patient = await this.patientsService.create(createPatientDto);
+
+    return {
+      success: true,
+      status: HttpStatus.CREATED,
+      message: 'Patient created successfully',
+      data: patient,
+    };
   }
 
+  /* ---------- GET ALL PATIENTS ---------- */
   @Get()
-  findAll() {
-    return this.patientsService.findAll();
+  async findAll() {
+    const patients = await this.patientsService.findAll();
+
+    return {
+      success: true,
+      status: HttpStatus.OK,
+      message: 'Patients fetched successfully',
+      data: patients,
+    };
   }
 
+  /* ---------- GET PATIENT BY ID ---------- */
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.patientsService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const patient = await this.patientsService.findOne(id);
+
+    return {
+      success: true,
+      status: HttpStatus.OK,
+      message: 'Patient fetched successfully',
+      data: patient,
+    };
   }
 
+  /* ---------- UPDATE PATIENT ---------- */
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePatientDto: UpdatePatientDto) {
-    return this.patientsService.update(id, updatePatientDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updatePatientDto: UpdatePatientDto,
+  ) {
+    const updatedPatient = await this.patientsService.update(
+      id,
+      updatePatientDto,
+    );
+
+    return {
+      success: true,
+      status: HttpStatus.OK,
+      message: 'Patient updated successfully',
+      data: updatedPatient,
+    };
   }
 
+  /* ---------- DELETE PATIENT ---------- */
   @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id') id: string) {
-    return this.patientsService.remove(id);
+  async remove(@Param('id') id: string) {
+    await this.patientsService.remove(id);
+
+    return {
+      success: true,
+      status: HttpStatus.OK,
+      message: 'Patient deleted successfully',
+      data: null,
+    };
   }
 }
