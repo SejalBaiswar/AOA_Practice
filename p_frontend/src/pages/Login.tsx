@@ -186,13 +186,16 @@ const Login: React.FC = () => {
       const data = await res.json();
 
       if (!res.ok) throw new Error(data.message);
-      if (data.practitionerType !== "Practice") {
-        throw new Error("Access denied. Practice users only.");
+      // Allow both Practice and Team Member users to login
+      if (data.practitionerType !== "Practice" && data.practitionerType !== "Team Member") {
+        throw new Error("Access denied. Practice or Team Member users only.");
       }
 
       localStorage.setItem("accessToken", data.accessToken);
       localStorage.setItem("userId", data.userId);
       localStorage.setItem("practitionerType", data.practitionerType);
+      // 🔹 Store tenantId for tenant isolation in API calls
+      localStorage.setItem("tenantId", data.tenantId);
 
       navigate("/dashboard");
     } catch (err: any) {

@@ -8,12 +8,21 @@ export type CreatePatientPayload = Omit<Patient, "id" | "dob" | "addresses"> & {
 };
 
 export async function createPatient(patient: CreatePatientPayload) {
-  const response = await api.post("/patients", patient);
+  // 🔹 Include tenantId for tenant isolation
+  const tenantId = localStorage.getItem("tenantId");
+  const payload = { ...patient, tenantId };
+  const response = await api.post("/patients", payload);
   return response.data.data;
 }
 
 export async function getPatients() {
-  const response = await api.get("/patients");
+  // 🔹 Filter by tenantId for tenant isolation
+  const tenantId = localStorage.getItem("tenantId");
+  const params = new URLSearchParams();
+  if (tenantId) {
+    params.set("tenantId", tenantId);
+  }
+  const response = await api.get(`/patients?${params.toString()}`);
   console.log(response)
   return response.data.data;
 }

@@ -7,12 +7,22 @@ export type CreateStaffPayload = Omit<Staff, "id" | "addresses"> & {
 };
 
 export async function createStaff(staff: CreateStaffPayload) {
-  const response = await api.post("/users", staff);
+  // 🔹 Include tenantId for tenant isolation
+  const tenantId = localStorage.getItem("tenantId");
+  const payload = { ...staff, tenantId };
+  const response = await api.post("/users", payload);
   return response.data.data;
 }
 
 export async function getStaff() {
-  const response = await api.get("/users");
+  // 🔹 Filter by tenantId and practitionerType for tenant isolation
+  const tenantId = localStorage.getItem("tenantId");
+  const params = new URLSearchParams();
+  params.set("practitionerType", "Team Member");
+  if (tenantId) {
+    params.set("tenantId", tenantId);
+  }
+  const response = await api.get(`/users?${params.toString()}`);
   return response.data.data;
 }
 

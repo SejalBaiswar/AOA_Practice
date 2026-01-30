@@ -140,7 +140,7 @@ export function PatientTable({
                       }
                       className="cursor-pointer"
                     >
-                      View Product Details
+                      View Products List
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

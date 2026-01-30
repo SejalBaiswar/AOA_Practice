@@ -71,6 +71,12 @@ export class User {
   })
   practitionerType: PractitionerType;
 
+  // Tenant ID links Team Members to their Practice
+  // For Practice users: tenant_id is null (they ARE the tenant)
+  // For Team Member users: tenant_id = Practice's user ID
+  @Column({ type: 'uuid', nullable: true })
+  tenantId: string | null;
+
   @OneToMany(() => Address, (address) => address.user)
   addresses: Address[];
 

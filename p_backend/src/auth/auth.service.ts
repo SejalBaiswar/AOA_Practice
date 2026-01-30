@@ -9,7 +9,7 @@ import * as crypto from 'crypto'
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   async login(email: string, password: string) {
     // Fetch user including plain password
@@ -35,16 +35,29 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    if (user.practitionerType !== PractitionerType.PRACTICE) {
-      console.log('❌ Not a PRACTICE user, type is:', user.practitionerType);
-      throw new UnauthorizedException('Access denied: practice only');
+    // Allow both PRACTICE and TEAM_MEMBER to login
+    if (user.practitionerType !== PractitionerType.PRACTICE &&
+      user.practitionerType !== PractitionerType.TEAM_MEMBER) {
+      console.log('❌ Not a PRACTICE or TEAM_MEMBER user, type is:', user.practitionerType);
+      throw new UnauthorizedException('Access denied: practice or team member only');
     }
 
-    console.log('✅ Login successful');
+    // 🔹 Determine tenantId for tenant isolation:
+    // - For PRACTICE users: tenantId = their own userId (they ARE the tenant)
+    // - For TEAM_MEMBER users: tenantId = their tenantId field (inherited from practice)
+    let tenantId: string;
+    if (user.practitionerType === PractitionerType.PRACTICE) {
+      tenantId = user.id;
+    } else {
+      tenantId = user.tenantId || user.id; // fallback to userId if no tenantId
+    }
+
+    console.log('✅ Login successful, tenantId:', tenantId);
     return {
       accessToken: 'dummy-token',
       practitionerType: user.practitionerType,
       userId: user.id,
+      tenantId: tenantId,
     };
   }
 

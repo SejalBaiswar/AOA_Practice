@@ -16,7 +16,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   /* ---------- CREATE USER ---------- */
   @Post()
@@ -34,8 +34,11 @@ export class UsersController {
 
   /* ---------- GET ALL USERS ---------- */
   @Get()
-  async findAll(@Query('practitionerType') practitionerType?: string) {
-    const users = await this.usersService.findAll(practitionerType);
+  async findAll(
+    @Query('practitionerType') practitionerType?: string,
+    @Query('tenantId') tenantId?: string,
+  ) {
+    const users = await this.usersService.findAll(practitionerType, tenantId);
 
     return {
       success: true,

@@ -8,6 +8,7 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { PatientsService } from './patients.service';
 import { CreatePatientDto } from './dto/create-patient.dto';
@@ -15,7 +16,7 @@ import { UpdatePatientDto } from './dto/update-patient.dto';
 
 @Controller('patients')
 export class PatientsController {
-  constructor(private readonly patientsService: PatientsService) {}
+  constructor(private readonly patientsService: PatientsService) { }
 
   /* ---------- CREATE PATIENT ---------- */
   @Post()
@@ -33,8 +34,8 @@ export class PatientsController {
 
   /* ---------- GET ALL PATIENTS ---------- */
   @Get()
-  async findAll() {
-    const patients = await this.patientsService.findAll();
+  async findAll(@Query('tenantId') tenantId?: string) {
+    const patients = await this.patientsService.findAll(tenantId);
 
     return {
       success: true,

@@ -12,7 +12,8 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const token = localStorage.getItem("accessToken");
   const practitionerType = localStorage.getItem("practitionerType");
 
-  if (!token || practitionerType !== "Practice") {
+  // Allow both Practice and Team Member users
+  if (!token || (practitionerType !== "Practice" && practitionerType !== "Team Member")) {
     return <Navigate to="/login" replace />;
   }
 
@@ -31,46 +32,46 @@ export default function App() {
           path="/*"
           element={
             <ProtectedRoute>
-            <SidebarProvider defaultOpen={false}>
-              <div className="h-screen w-screen flex flex-col overflow-hidden bg-background text-foreground">
-                <Navbar />
+              <SidebarProvider defaultOpen={false}>
+                <div className="h-screen w-screen flex flex-col overflow-hidden bg-background text-foreground">
+                  <Navbar />
 
-                <div className="flex flex-1 min-h-0 w-full overflow-hidden">
-                  <AppSidebar />
+                  <div className="flex flex-1 min-h-0 w-full overflow-hidden">
+                    <AppSidebar />
 
-                  <SidebarInset className="w-full overflow-hidden">
-                    <main className="h-full w-full p-6 bg-muted/40 overflow-y-auto">
-                      <Routes>
-                        <Route path="dashboard" element={<Dashboard />} />
+                    <SidebarInset className="w-full overflow-hidden">
+                      <main className="h-full w-full p-6 bg-muted/40 overflow-y-auto">
+                        <Routes>
+                          <Route path="dashboard" element={<Dashboard />} />
 
-                        <Route path="patients" element={<PatientList />} />
+                          <Route path="patients" element={<PatientList />} />
 
-                        {/* Product List */}
-                        <Route
-                          path="patients/:patientId/products"
-                          element={<ProductList />}
-                        />
+                          {/* Product List */}
+                          <Route
+                            path="patients/:patientId/products"
+                            element={<ProductList />}
+                          />
 
-                        {/* Product Details */}
-                        <Route
-                          path="patients/:patientId/products/:orderId"
-                          element={<ProductList />}
-                        />
+                          {/* Product Details */}
+                          <Route
+                            path="patients/:patientId/products/:orderId"
+                            element={<ProductList />}
+                          />
 
-                        <Route path="staff" element={<StaffPage />} />
+                          <Route path="staff" element={<StaffPage />} />
 
-                        {/* ⚠️ ALWAYS KEEP THIS LAST */}
-                        <Route
-                          path="*"
-                          element={<Navigate to="/login" replace />}
-                        />
-                      </Routes>
-                    </main>
-                  </SidebarInset>
+                          {/* ⚠️ ALWAYS KEEP THIS LAST */}
+                          <Route
+                            path="*"
+                            element={<Navigate to="/login" replace />}
+                          />
+                        </Routes>
+                      </main>
+                    </SidebarInset>
+                  </div>
                 </div>
-              </div>
-            </SidebarProvider>
-           </ProtectedRoute>
+              </SidebarProvider>
+            </ProtectedRoute>
           }
         />
       </Routes>

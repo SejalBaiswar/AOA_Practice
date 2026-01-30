@@ -20,6 +20,14 @@ export class Order {
   @Column({ type: 'uuid' })
   patient_id: string;
 
+  @Column({type:'int', nullable:true})
+  address_id: number | null;  //new
+
+
+  @Column({ type:'uuid', nullable:true})
+  clinic_id: string | null;  //new
+
+
   @Column({ type: 'varchar', length: 100 })
   product_list: string;
 

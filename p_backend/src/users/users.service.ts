@@ -19,7 +19,7 @@ export class UsersService {
 
     @InjectRepository(Address)
     private readonly addressRepository: Repository<Address>,
-  ) {}
+  ) { }
 
   // ✅ CREATE USER WITH PLAIN PASSWORD
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -35,16 +35,17 @@ export class UsersService {
         );
       }
 
-      // 🔹 Extract address, ignore password from frontend
-      const { address, password, ...userData } = createUserDto;
+      // 🔹 Extract address, password, and tenantId from frontend
+      const { address, password, tenantId, ...userData } = createUserDto;
 
       // 🔹 Generate plain password
       const plainPassword = `${createUserDto.firstName}@2026`;
 
-      // 🔹 Create user (store plain password)
+      // 🔹 Create user (store plain password and tenantId)
       const user = this.userRepository.create({
         ...userData,
         password: plainPassword,
+        tenantId: tenantId || null,
       });
 
       const savedUser = await this.userRepository.save(user);
@@ -78,8 +79,8 @@ export class UsersService {
     }
   }
 
-  // ✅ FIND ALL USERS (optionally filtered by practitionerType)
-  async findAll(practitionerType?: string): Promise<User[]> {
+  // ✅ FIND ALL USERS (optionally filtered by practitionerType and tenantId)
+  async findAll(practitionerType?: string, tenantId?: string): Promise<User[]> {
     try {
       const allowedTypes = [
         PractitionerType.ADMIN,
@@ -100,6 +101,15 @@ export class UsersService {
         // No filter passed: return only users whose practitionerType
         // is one of Admin, Team Member, Practice
         where = { practitionerType: In(allowedTypes) };
+      }
+
+      // 🔹 Add tenantId filter if provided (for tenant isolation)
+      if (tenantId) {
+        if (Array.isArray(where)) {
+          where = where.map((w) => ({ ...w, tenantId }));
+        } else {
+          where = { ...where, tenantId };
+        }
       }
 
       return await this.userRepository.find({

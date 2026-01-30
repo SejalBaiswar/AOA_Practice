@@ -67,4 +67,8 @@ export class CreatePatientDto {
   @Type(() => CreateAddressDto)
   @IsNotEmpty({ message: 'Address is required' })
   address: CreateAddressDto;
+
+  @IsOptional()
+  @IsString()
+  tenantId?: string;
 }

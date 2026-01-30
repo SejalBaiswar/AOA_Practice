@@ -7,7 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Patient } from './entities/patient.entity';
-  import { Address } from '../addresses/entities/address.entity';
+import { Address } from '../addresses/entities/address.entity';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
 
@@ -19,7 +19,7 @@ export class PatientsService {
 
     @InjectRepository(Address)
     private readonly addressRepository: Repository<Address>,
-  ) {}
+  ) { }
 
   // ================= CREATE PATIENT =================
   async create(createPatientDto: CreatePatientDto): Promise<any> {
@@ -34,12 +34,13 @@ export class PatientsService {
       );
     }
 
-    const { address, ...patientData } = createPatientDto;
+    const { address, tenantId, ...patientData } = createPatientDto;
 
-    // 🔹 Save patient FIRST
+    // 🔹 Save patient FIRST (include tenantId for tenant isolation)
     const patient = this.patientRepository.create({
       ...patientData,
       dob: new Date(createPatientDto.dob),
+      tenantId: tenantId || null,
     });
 
     const savedPatient = await this.patientRepository.save(patient);
@@ -84,8 +85,15 @@ export class PatientsService {
   }
 
   // ================= FIND ALL =================
-  async findAll(): Promise<any[]> {
+  async findAll(tenantId?: string): Promise<any[]> {
+    // 🔹 Build where clause with optional tenant filter
+    const whereClause: any = {};
+    if (tenantId) {
+      whereClause.tenantId = tenantId;
+    }
+
     const patients = await this.patientRepository.find({
+      where: whereClause,
       order: { createdAt: 'DESC' },
     });
 

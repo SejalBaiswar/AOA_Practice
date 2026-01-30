@@ -34,6 +34,10 @@ export class Patient {
   @Column({ type: 'varchar', length: 20 })
   gender: string;
 
+  // Tenant ID links Patient to the Practice that created them
+  @Column({ type: 'uuid', nullable: true })
+  tenantId: string | null;
+
   @OneToMany(() => Address, (address) => address.patient)
   addresses: Address[];
 
