@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
+
 import {
   ChartContainer,
   ChartTooltip,
@@ -38,29 +39,23 @@ const chartConfig = {
 
 export function TotalPatientsLineChart() {
   return (
-    <Card className="h-full min-h-[360px]">
-      <CardHeader>
+    <Card className="h-full min-h-[300px] overflow-hidden">
+      <CardHeader className="pb-2">
         <CardTitle>Total Patients</CardTitle>
         <CardDescription>August 2025 – January 2026</CardDescription>
       </CardHeader>
 
-      <CardContent>
-        <ChartContainer config={chartConfig}>
-          <LineChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
-          >
+      <CardContent className="pb-0">
+        <ChartContainer config={chartConfig} className="h-[240px] w-full">
+          <LineChart data={chartData} margin={{ left: 8, right: 0 }}>
             <CartesianGrid vertical={false} />
 
             <XAxis
               dataKey="month"
               tickLine={false}
               axisLine={false}
-              tickMargin={8}
+              tickMargin={6}
+              padding={{ right: 12 }}
               tickFormatter={(value) => value.slice(0, 3)}
             />
 
@@ -74,23 +69,19 @@ export function TotalPatientsLineChart() {
               type="natural"
               stroke="var(--color-patients)"
               strokeWidth={2}
-              dot={{
-                fill: "var(--color-patients)",
-              }}
-              activeDot={{
-                r: 6,
-              }}
+              dot={{ r: 3 }}
+              activeDot={{ r: 5 }}
             />
           </LineChart>
         </ChartContainer>
       </CardContent>
 
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 leading-none font-medium">
+      <CardFooter className="flex-col items-start gap-1 text-sm pt-2">
+        <div className="flex gap-2 font-medium">
           Patient growth trend <TrendingUp className="h-4 w-4" />
         </div>
-        <div className="text-muted-foreground leading-none">
-          Showing total patients for the last 6 months
+        <div className="text-muted-foreground">
+          Showing total patients for last 6 months
         </div>
       </CardFooter>
     </Card>

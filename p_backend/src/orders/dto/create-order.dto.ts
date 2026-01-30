@@ -32,7 +32,7 @@ export class CreateOrderDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(100)
-  case_type: string;
+  product_list: string;
 
   @ApiProperty({
     description: 'Shade code',
@@ -90,4 +90,13 @@ export class CreateOrderDto {
   @IsOptional()
   @IsString()
   design_notes?: string;
+
+  @ApiProperty({
+    description: 'Selected product type',
+    example: 'MARA 3DMPA',
+  })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(255)
+  product_type: string;
 }

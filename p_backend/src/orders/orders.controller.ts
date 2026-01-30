@@ -1,4 +1,5 @@
-import { Controller,
+import {
+  Controller,
   Post,
   Body,
   Get,
@@ -8,28 +9,21 @@ import { Controller,
   ParseUUIDPipe,
   NotFoundException,
   UseInterceptors,
-  UploadedFile, } from '@nestjs/common';
-import { OrdersService } from './orders.service';
-import { CreateOrderDto } from './dto/create-order.dto';
-import { GetOrdersDto } from './dto/get-orders.dto';
-import { PatientOrdersQueryDto } from './dto/patient-orders-query.dto';
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
+import { OrdersService } from './orders.service';
+import { CreateOrderDto } from './dto/create-order.dto';
+import { PatientOrdersQueryDto } from './dto/patient-orders-query.dto';
 
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
-  
+
   @Post()
   @UseInterceptors(FileInterceptor('image'))
-  async createOrder(
-    @Body() createOrderDto: CreateOrderDto,
-    @UploadedFile() image?: Express.Multer.File,
-  ) {
-    const order = await this.ordersService.createOrder(
-      createOrderDto,
-      image,
-    );
+  async createOrder(@Body() createOrderDto: CreateOrderDto) {
+    const order = await this.ordersService.createOrder(createOrderDto);
 
     return {
       statusCode: HttpStatus.CREATED,
@@ -38,46 +32,61 @@ export class OrdersController {
     };
   }
 
-
-
-@Get('patient/:patientId')
-async getOrdersByPatientId(
-@Param('patientId', new ParseUUIDPipe()) patientId: string,
-  @Query() query: PatientOrdersQueryDto,
-) {
-  const result = await this.ordersService.getOrdersByPatientId(
-    patientId,
-    query.page,
-    query.limit,
-  );
-
-  return {
-    statusCode:HttpStatus.OK,
-    success: true,
-    message: 'Patient orders fetched successfully',
-    ...result,
-  };
-}
-
-@Get(':orderId')
-async getOrderById(
-  @Param('orderId', new ParseUUIDPipe()) orderId: string,
-) {
-  const order = await this.ordersService.getOrderById(orderId);
- 
-  if (!order) {
-    throw new NotFoundException('Order not found');
+  /* ✅ PRODUCT LIST */
+  @Get('product-list')
+  async getProductList() {
+    return {
+      statusCode: HttpStatus.OK,
+      data: await this.ordersService.getProductList(),
+    };
   }
- 
-  return {
-    statusCode: HttpStatus.OK,
-    message: 'Order fetched successfully',
-    data: order,
-  };
-}
 
+  /* ✅ PRODUCT TYPE (DEPENDENT) */
+  @Get('product-type')
+  async getProductType(@Query('listName') listName: string) {
+    if (!listName) {
+      return {
+        statusCode: 400,
+        message: 'listName is required',
+        data: [],
+      };
+    }
 
- 
+    return {
+      statusCode: 200,
+      data: await this.ordersService.getProductTypesByListName(listName),
+    };
+  }
+
+  @Get('patient/:patientId')
+  async getOrdersByPatientId(
+    @Param('patientId', new ParseUUIDPipe()) patientId: string,
+    @Query() query: PatientOrdersQueryDto,
+  ) {
+    const result = await this.ordersService.getOrdersByPatientId(
+      patientId,
+      query.page,
+      query.limit,
+    );
+
+    return {
+      statusCode: HttpStatus.OK,
+      ...result,
+    };
+  }
+
+  /* ❗ KEEP LAST */
+  @Get(':orderId')
+  async getOrderById(@Param('orderId', new ParseUUIDPipe()) orderId: string) {
+    const order = await this.ordersService.getOrderById(orderId);
+
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
+
+    return {
+      statusCode: HttpStatus.OK,
+      data: order,
+    };
+  }
 }
- 
- 

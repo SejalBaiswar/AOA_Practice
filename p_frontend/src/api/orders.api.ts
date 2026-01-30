@@ -4,7 +4,7 @@ import api from "./axios";
 export type Order = {
   order_id: string;
   patient_id: string;
-  case_type: string;
+  product_list: string;
   shade: string;
   tooth_numbers: string;
   priority: string;
@@ -16,12 +16,12 @@ export type Order = {
 /* ---------- Types (Create Order Payload) ---------- */
 export type CreateOrderPayload = {
   patient_id: string;
-  case_type: string;
+  product_list: string;
   shade: string;
   tooth_numbers: number[];
-  priority: string;           // backend enum
-  order_date: string;         // ISO string
-  expected_delivery: string;  // ISO string
+  priority: string; // backend enum
+  order_date: string; // ISO string
+  expected_delivery: string; // ISO string
   design_notes?: string;
 };
 
@@ -48,4 +48,3 @@ export async function createOrder(payload: FormData) {
   });
   return response.data.data;
 }
-

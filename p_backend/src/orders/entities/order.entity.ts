@@ -21,7 +21,10 @@ export class Order {
   patient_id: string;
 
   @Column({ type: 'varchar', length: 100 })
-  case_type: string;
+  product_list: string;
+
+  @Column({ type: 'varchar', length: 255 })
+  product_type: string;
 
   @Column({ type: 'varchar', length: 10 })
   shade: string;

@@ -192,7 +192,7 @@ export default function ProductListPage() {
               orders.map((o) => (
                 <TableRow key={o.order_id}>
                   <TableCell>{o.order_id}</TableCell>
-                  <TableCell>{o.case_type}</TableCell>
+                  <TableCell>{o.product_list}</TableCell>
                   <TableCell>{getPriorityBadge(o.priority)}</TableCell>
                   <TableCell>{getStatusBadge(o.status)}</TableCell>
                   <TableCell>{o.order_date.slice(0, 10)}</TableCell>

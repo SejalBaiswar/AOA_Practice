@@ -56,8 +56,8 @@ export default function OrderDetailsDialog({ order, onClose }: Props) {
                 />
                 <DetailCard
                   icon={<Layers className="w-4 h-4 text-red-700" />}
-                  label="Case Type"
-                  value={order.case_type}
+                  label="Product Type"
+                  value={order.product_list}
                 />
                 <DetailCard
                   icon={<Palette className="w-4 h-4 text-red-700" />}
